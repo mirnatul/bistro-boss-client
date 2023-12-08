@@ -10,6 +10,7 @@ import useMenu from './../../../hooks/useMenu';
 import SectionTitle from '../../../components/SectionTitle/SectionTitle';
 import MenuCategory from '../MenuCategory/MenuCategory';
 
+
 const Menu = () => {
     const [menu] = useMenu();
 
