@@ -17,7 +17,7 @@ const Order = () => {
 
     const categories = ['salad', 'pizza', 'soup', 'dessert', 'drinks'];
     const { category } = useParams();
-    const initialIndex = categories.indexOf(category);
+    const initialIndex = categories.indexOf(category.toLowerCase());
 
     const [tabIndex, setTabIndex] = useState(initialIndex);
     const [menu] = useMenu();
