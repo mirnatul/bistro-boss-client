@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { AuthContext } from '../../provider/AuthProvider';
 import { useNavigate } from 'react-router-dom';
+import SocialLogin from '../Shared/SocialLogin/SocialLogin';
 
 const SignUp = () => {
 
@@ -16,10 +17,23 @@ const SignUp = () => {
                 const loggedUser = result.user;
                 updateUserProfile(data.name, data.photoURL)
                     .then(() => {
-                        console.log('user profile info updated');
-                        reset();
-                        alert('profile updated');
-                        navigate('/');
+                        const savedUser = { name: data.name, email: data.email };
+                        fetch('http://localhost:5000/users', {
+                            method: 'POST',
+                            headers: {
+                                'content-type': 'application/json'
+                            },
+                            body: JSON.stringify(savedUser)
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.insertedId) {
+                                    console.log('user profile info updated');
+                                    reset();
+                                    alert('profile updated');
+                                    navigate('/');
+                                }
+                            })
                     })
                     .catch(err => console.log(err))
             })
@@ -67,6 +81,7 @@ const SignUp = () => {
                             <input className='btn btn-primary' type="submit" value="Sign Up" />
                         </div>
                     </form>
+                    <SocialLogin></SocialLogin>
                 </div>
             </div>
         </div>
