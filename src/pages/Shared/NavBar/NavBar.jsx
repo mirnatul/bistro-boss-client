@@ -23,7 +23,7 @@ const NavBar = () => {
             <Link to='/dashboard/mycart'>
                 <button className="btn">
                     Cart
-                    <div className="badge badge-secondary">+{cart.length}</div>
+                    <div className="badge badge-secondary">+{cart.length || 0}</div>
                 </button>
             </Link>
         </li>

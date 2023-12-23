@@ -30,8 +30,9 @@ const SocialLogin = () => {
                         if (data.insertedId) {
                             console.log('user profile info updated');
                             alert('profile updated');
-                            navigate(from, { replace: true })
+                            // navigate(from, { replace: true })
                         }
+                        navigate(from, { replace: true })
                     })
             })
     }
