@@ -2,10 +2,47 @@ import React from 'react';
 import SectionTitle from '../../../components/SectionTitle/SectionTitle';
 import { useForm } from 'react-hook-form';
 
+
+const img_hosting_token = import.meta.env.VITE_Image_Upload_token
+import useAxiosSecure from './../../../hooks/useAxiosSecure';
+
+
 const AddItem = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const [axiosSecure] = useAxiosSecure();
+
+    const { register, handleSubmit, reset } = useForm();
+    const image_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`
     const onSubmit = data => {
-        console.log(data)
+        // console.log(data)
+        // console.log(img_hosting_token);
+
+        const formData = new FormData()
+        formData.append('image', data.image[0])
+
+        fetch(image_hosting_url, {
+            method: 'POST',
+            body: formData
+        })
+            .then(res => res.json())
+            .then(imgResponse => {
+                console.log(imgResponse);
+                if (imgResponse.success) {
+                    const imgURL = imgResponse.data.display_url;
+                    // const menuItem = data;
+                    const { name, price, category, recipe } = data;
+                    const newItem = { name, price: parseFloat(price), category, recipe, image: imgURL }
+                    // console.log(newItem);
+                    // menuItem.image = imgURL;
+                    axiosSecure.post('/menu', newItem)
+                        .then(data => {
+                            console.log('after posting new menu item', data.data);
+                            if (data.data.insertedId) {
+                                reset()
+                                alert("Menu added successfully")
+                            }
+                        })
+                }
+            })
     };
     return (
         <div onSubmit={handleSubmit(onSubmit)} className='w-full px-10'>
@@ -24,13 +61,14 @@ const AddItem = () => {
                         <div className="label">
                             <span className="label-text">Category*</span>
                         </div>
-                        <select {...register("category", { required: true })} className="select select-bordered">
-                            <option disabled selected>Pick one</option>
-                            <option>Pizza</option>
-                            <option>Soup</option>
-                            <option>Salad</option>
-                            <option>Deserts</option>
-                            <option>Drinks</option>
+                        <select defaultValue="Pick One" {...register("category", { required: true })} className="select select-bordered">
+                            <option disabled>Pick One</option>
+                            <option>pizza</option>
+                            <option>soup</option>
+                            <option>salad</option>
+                            <option>deserts</option>
+                            <option>desi</option>
+                            <option>drinks</option>
                         </select>
                     </label>
                     <label className="form-control w-full ">
@@ -44,7 +82,7 @@ const AddItem = () => {
                     <div className="label">
                         <span className="label-text">Recipe details*</span>
                     </div>
-                    <textarea name='recipe' {...register("details", { required: true })} className="textarea textarea-bordered h-24" placeholder="Recipe details"></textarea>
+                    <textarea name='recipe' {...register("recipe", { required: true })} className="textarea textarea-bordered h-24" placeholder="Recipe details"></textarea>
                 </label>
                 <label className="form-control w-full my-4">
                     <div className="label">
