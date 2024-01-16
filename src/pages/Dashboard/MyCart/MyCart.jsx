@@ -1,6 +1,7 @@
 import React from 'react';
 import Swal from 'sweetalert2';
 import useCart from './../../../hooks/useCart';
+import { Link } from 'react-router-dom';
 
 const MyCart = () => {
 
@@ -40,7 +41,9 @@ const MyCart = () => {
             <div className='flex justify-evenly font-semibold h-16'>
                 <h3 className="text-3xl">Total Items: {cart.length}</h3>
                 <h3 className="text-3xl">Total Price: {total}</h3>
-                <button className='btn btn-warning'>Pay</button>
+                <Link to="/dashboard/payment">
+                    <button className='btn btn-warning'>Pay</button>
+                </Link>
             </div>
             <div>
                 <div className="overflow-x-auto">
